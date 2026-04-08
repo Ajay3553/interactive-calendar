@@ -28,12 +28,16 @@ const heroVariants = {
 // Component
 function Hero({ theme, year, direction, isNotesOpen }) {
   return (
-    <motion.div
-      className="shrink-0 overflow-hidden relative w-full"
-      animate={{ height: isNotesOpen ? '45%' : 'calc(100% - 56px)' }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      layout
-    >
+      <motion.div 
+        className="shrink-0 overflow-hidden relative w-full"
+        animate={{ 
+          height: isNotesOpen 
+            ? (window.innerWidth < 768 ? '0%' : '45%') 
+            : 'calc(100% - 56px)' 
+        }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        layout
+      >
       <AnimatePresence mode="wait" custom={direction}>
         <motion.div
           key={theme.name + year}

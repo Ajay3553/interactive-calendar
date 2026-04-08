@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, Suspense } from 'react'
+import React, { useState, useEffect, useMemo, Suspense, useRef } from 'react' // NEW: Added useRef
 import { motion } from 'framer-motion'
 import CalendarGrid from './CalenderGrid'
 import useCalendar from '../hooks/useCalendar'
@@ -19,6 +19,8 @@ function Wall() {
   const theme = useMemo(() => monthThemes[cal.currentMonth], [cal.currentMonth])
   const [isNotesOpen, setIsNotesOpen] = useState(false)
 
+  const wallRef = useRef(null)
+
   // Automatically open notes panel when a range starts
   useEffect(() => {
     if (range.startDate) {
@@ -37,6 +39,18 @@ function Wall() {
     }
   }, [darkMode])
 
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (isNotesOpen && wallRef.current && !wallRef.current.contains(event.target)) {
+        setIsNotesOpen(false);
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isNotesOpen]);
+
   // Inject the current month's theme colors as CSS variables
   const styleVars = {
     '--accent': theme.accent,
@@ -53,13 +67,14 @@ function Wall() {
             key={t.name}
             src={t.image}
             alt="preload"
-            fetchpriority="high"
+            fetchPriority="high"
             decoding="sync"
           />
         ))}
       </div>
 
       <motion.div
+        ref={wallRef}
         className="relative w-full max-w-[1080px] bg-[#faf9f6] dark:bg-[#2d2c2a] rounded-[22px] shadow-2xl border border-black/5 dark:border-white/10 overflow-hidden transition-colors duration-300"
         style={styleVars}
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -81,7 +96,7 @@ function Wall() {
         <div className="flex flex-col md:grid md:grid-cols-[1fr_1.25fr] min-h-[500px]">
           
           {/* Left Column: Hero Image & Notes */}
-          <section className="flex flex-col border-b md:border-b-0 md:border-r border-black/10 dark:border-white/10 overflow-hidden relative">
+          <section className="h-[350px] md:h-auto flex flex-col border-b md:border-b-0 md:border-r border-black/10 dark:border-white/10 overflow-hidden relative">
             <Suspense fallback={<div className="h-full w-full animate-pulse bg-gray-200 dark:bg-gray-800" />}>
               <HeroPanel
                 theme={theme}

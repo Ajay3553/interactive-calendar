@@ -37,12 +37,16 @@ function NotesPanel({
   const hasSelection = !!startDate;
 
   return (
-    <motion.div
-      className="flex flex-col bg-[#faf9f6] dark:bg-[#2d2c2a] border-t border-black/5 dark:border-white/10 absolute bottom-0 left-0 w-full"
-      animate={{ height: isNotesOpen ? '55%' : '56px' }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      layout
-    >
+      <motion.div
+        className="flex flex-col bg-[#faf9f6] dark:bg-[#2d2c2a] border-t border-black/5 dark:border-white/10 absolute bottom-0 left-0 w-full"
+        animate={{
+          height: isNotesOpen
+            ? (window.innerWidth < 768 ? '100%' : '55%') 
+            : '56px'
+        }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        layout
+      >
       <div
         className="flex items-center gap-2 p-4 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-colors" 
         onClick={() => setIsNotesOpen(!isNotesOpen)}
