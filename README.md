@@ -1,5 +1,7 @@
 # Interactive Calendar Component 🗓️
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://ajay3553.github.io/interactive-calendar/)
+
 A highly optimized, fully responsive, and interactive calendar component built with React, Vite, and Tailwind CSS.
 
 ## 🌟 Key Features
@@ -46,12 +48,35 @@ src/
 └── main.jsx
 ```
 
+## 🚀 Getting Started
+
+### Prerequisites
+Make sure you have [Node.js](https://nodejs.org/) installed (v18 or higher recommended).
+
+### Installation & Development
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Ajay3553/interactive-calendar.git
+   cd interactive-calendar
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
 ## 🧠 Optimization Details
 
 This calendar handles a massive amount of state changes (hovering individual days while selecting a range). To maintain a buttery-smooth 60fps framerate, the following enterprise-level optimizations were applied:
 
 - **Component Memoization (`React.memo`):** `DayCell` utilizes a custom comparator function comparing `getTime()` values so that only the specific cells affected by a new selection or hover range are re-rendered, completely skipping the unchanged days.
-- **Function & Value Caching (`useMemo` & `useCallback`):** The complex day array (`buildCalendarDays`) is cached and only recalculates when the month or year actually changes. All hook functions and click handlers are wrapped in `useCallback` to prevent cascading child re-renders.
+- **Function & Value Caching (`useMemo` & `useCallback`):** The complex days array (`buildCalendarDays`) is cached and only recalculates when the month or year actually changes. All hook functions and click handlers are wrapped in `useCallback` to prevent cascading child re-renders.
 - **State Consolidation:** The `month` and `year` states were combined into a single object inside `useCalendar` to prevent React from triggering double render cycles.
 - **Aggressive Image Pre-caching:** Images are in local assets, injecting them invisibly into the DOM on initial load with `decoding="sync"` and `fetchpriority="high"`. This forces the browser to decode the images instantly, eliminating the micro-stutter typical in image carousels.
 - **Code Splitting:** Heavy UI panels (`Hero` and `NotesPanel`) are dynamically imported using `React.lazy` and `<Suspense>` to keep the initial JavaScript bundle tiny.
