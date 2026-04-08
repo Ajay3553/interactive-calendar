@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { formatRangeLabel } from '../utils/dateUtils'
+import { getHoliday } from '../utils/holidays'
 
 function NotesPanel({
   isNotesOpen,
@@ -35,6 +36,8 @@ function NotesPanel({
 
   const monthNotes = getMonthNotes(currentYear, currentMonth);
   const hasSelection = !!startDate;
+  
+  const holiday = startDate ? getHoliday(startDate) : null;
 
   return (
       <motion.div
@@ -95,8 +98,14 @@ function NotesPanel({
           >
             {hasSelection ? (
               <div className="flex flex-col gap-2.5 h-full">
-                <div className="text-[11px] text-[var(--accent)] font-medium bg-[rgba(var(--accent-rgb),0.08)] px-2 py-1.5 rounded-md border-l-2 border-[var(--accent)] leading-snug">
-                  {formatRangeLabel(startDate, endDate) || 'Select an end date...'}
+                <div className="flex flex-col gap-1 text-[11px] text-[var(--accent)] font-medium bg-[rgba(var(--accent-rgb),0.08)] px-2 py-1.5 rounded-md border-l-2 border-[var(--accent)] leading-snug">
+                  <span>{formatRangeLabel(startDate, endDate) || 'Select an end date...'}</span>
+                  {holiday && (
+                    <span className="font-bold flex items-center gap-1 opacity-90">
+                      <span>{holiday.emoji}</span>
+                      <span>{holiday.name}</span>
+                    </span>
+                  )}
                 </div>
                 
                 <textarea
